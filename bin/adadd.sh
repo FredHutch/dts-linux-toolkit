@@ -4,10 +4,8 @@
 
 set -e
 
-export PATH=/usr/bin:/usr/sbin:/usr/local/bin
-
 # Resolve working directory
-tld=$(dirname(dirname($0)))
+tld=$(dirname $(dirname ${0}))
 # Locate config relative to script
 cfg=${tld}/etc/adadd.cfg
 
