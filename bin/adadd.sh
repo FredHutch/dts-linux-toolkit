@@ -14,21 +14,11 @@ then
    exit 0
 fi
 
-# Until Chef does this right, just download a working krb5.conf.
-echo ; echo "Downloading a working /etc/krb5.conf."
-rm -f /etc/krb5.conf
-wget http://cuttlefish.fhcrc.org/misc/krb5.conf -O /etc/krb5.conf
-
 if ! `which msktutil >/dev/null 2>&1`
 then
    echo ; echo "Installing the msktutil package."
    apt-get -y -q install msktutil
 fi
-
-rm -f /usr/local/sbin/msktjoin
-echo ; echo "Downloading the msktjoin script."
-wget http://cuttlefish.fhcrc.org/misc/msktjoin -O /usr/local/sbin/msktjoin
-chmod +x /usr/local/sbin/msktjoin
 
 # Remove the krb5.keytab from any prior attempts.
 rm -f /etc/krb5.keytab
