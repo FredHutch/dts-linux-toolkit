@@ -1,0 +1,51 @@
+#!/bin/bash
+#
+# Creates Active Dirctory computer object with host service 
+# principle, aka "joins AD Domain"
+#
+
+# Resolve working directory
+tld=$(dirname $(dirname $0))
+# Locate config relative to script
+cfg=${tld}/etc/msktjoin.cfg
+
+. ${cfg} || ( \
+	echo "ERROR: Config file ${cfg} is not readable- install may be broken" ;\
+	exit 1 ;
+ )
+
+if [ $# -ne 1 ]
+then
+  hostfqdn=`hostname -f`
+else
+  hostfqdn=$1
+fi
+
+computername=`hostname -s`
+
+if [ "$hostfqdn" = "$computername" ]
+then
+  hostfqdn="${computername}.${domain}"
+fi
+
+# add --verbose for debugging
+
+# host principal is needed for sso via sshd but can also be provided via
+# samba/winbind
+
+msktutil --dont-expire-password \
+	--no-pac \
+	--computer-name $computername \
+	--server dc \
+	--enctypes 0x07 \
+	-b "${ou}" \
+	-k /etc/krb5.keytab \
+	-h $hostfqdn \
+	-s host/$hostfqdn \
+	-s HOST/$computername \
+	--upn host/$hostfqdn \
+	--description "Kerberos Account by msktutil"
+
+klist -k -t -e
+
+exit 0
