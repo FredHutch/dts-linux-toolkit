@@ -1,6 +1,7 @@
 #!/bin/bash
 #
-# Creates Active Dirctory computer object with host service principle, aka "joins AD Domain"
+# Creates Active Dirctory computer object with host service 
+# principle, aka "joins AD Domain"
 #
 
 OU='ou=Workstations,ou=Computers,ou=SciComp'
@@ -20,9 +21,22 @@ then
 fi
 
 # add --verbose for debugging
-# host principal is needed for sso via sshd but can also be provided via samba/winbind
 
-msktutil --dont-expire-password --no-pac --computer-name $computername --server dc --enctypes 0x07 -b "$OU" -k /etc/krb5.keytab -h $hostfqdn -s host/$hostfqdn -s HOST/$computername --upn host/$hostfqdn  --description "Kerberos Account by msktutil"
+# host principal is needed for sso via sshd but can also be provided via
+# samba/winbind
+
+msktutil --dont-expire-password \
+	--no-pac \
+	--computer-name $computername \
+	--server dc \
+	--enctypes 0x07 \
+	-b "$OU" \
+	-k /etc/krb5.keytab \
+	-h $hostfqdn \
+	-s host/$hostfqdn \
+	-s HOST/$computername \
+	--upn host/$hostfqdn \
+	--description "Kerberos Account by msktutil"
 
 klist -k -t -e
 
