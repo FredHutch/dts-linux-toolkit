@@ -6,6 +6,22 @@ set -e
 
 export PATH=/usr/bin:/usr/sbin:/usr/local/bin
 
+# Resolve working directory
+tld=$(dirname(dirname($0)))
+# Locate config relative to script
+cfg=${tld}/etc/adadd.cfg
+
+. ${cfg} || ( \
+	echo "ERROR: Config file ${cfg} is not readable- install may be broken" ;\
+	exit 1 ;
+)
+
+if [ \! -x  ${msktjoin} ]
+then
+	echo "ERROR: msktjoin (${msktjoin}) is missing or not executable"
+	exit 1
+fi
+
 echo " "
 echo "This script joins a Linux desktop to the AD domain."
 echo "It can be run more than once if necessary."
@@ -41,7 +57,7 @@ kinit $adminid
 sleep 4
 
 echo ; echo "Attempting to join the system to the AD domain."
-msktjoin
+${msktjoin}
 
 echo " "
 echo "If results of klist -k -t -e do not look right, run msktjoin now."
