@@ -4,6 +4,8 @@
 
 set -e
 
+export PATH=/usr/bin:/usr/sbin:/usr/local/bin
+
 echo " "
 echo "This script joins a Linux desktop to the AD domain."
 echo "It can be run more than once if necessary."
