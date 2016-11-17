@@ -2,6 +2,8 @@
 # Add a Linux desktop to the AD domain.
 # NOTE: You have to put a real password in here, or it won't work!
 
+set -e
+
 echo " "
 echo "This script joins a Linux desktop to the AD domain."
 echo "It can be run more than once if necessary."
